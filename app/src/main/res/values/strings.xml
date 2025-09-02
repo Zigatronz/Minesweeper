@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Minesweeper</string>
+    <string name="app_logo_description">Minesweeper logo.</string>
+
+    <string name="menu_btn_start">Start</string>
+    <string name="menu_btn_htp">How to play</string>
+    <string name="menu_btn_exit">Exit</string>
+
+    <string name="htp_img_description">How to play image.</string>
+    <string name="htp_header">How to play</string>
+    <string name="htp_btn_return">Back to Main Menu</string>
+    <string name="htp_btn_next">Next page</string>
+    <string name="htp_btn_previous">Previous page</string>
+    <string name="htp_text1">The board is divided into tiles, with mines randomly distributed.\n\nTo win, you need to open all the tiles that do not contain a mine.\n\nThe number on a tile shows the number of adjacent mines.</string>
+    <string name="htp_text2">To start the game, you should click anywhere on the board. This is what the board looks like after your first click.\n\nThe next step is to look at the yellow-outlined tile. The number 1 on the tile indicates there is 1 mine adjacent to it.</string>
+    <string name="htp_text3">Look at the adjacent tiles to see if there are any that have not been revealed yet.\n\nYou can see that there is only one unrevealed tile.\n\nThis means we can assume that tile contains a mine.</string>
+    <string name="htp_text4">Now, to mark the tile as a mine, you need to flag it.\n\nTo flag a tile, you need to tap and hold for a short time. It will then be flagged as shown above.</string>
+    <string name="htp_text5">There you have it!\n\nTo complete the game, you need to do the same thing for all other tiles until the only tiles that haven\'t been revealed are the ones with mines.\n\nDon\'t reveal tiles with mines, or you\'ll get blown up. Have fun!</string>
+
+    <string name="diff_header">Please select difficulty</string>
+    <string name="diff_easy_btn">Easy</string>
+    <string name="diff_easy_description">9x9 with 10 mines</string>
+    <string name="diff_intermediate_btn">Intermediate</string>
+    <string name="diff_intermediate_description">16x16 with 32 mines</string>
+
+    <string name="game_btn_exit">Exit</string>
+    <string name="game_btn_reset">Reset</string>
+    <string name="game_text_mine">x99</string>
+    <string name="game_text_time">999s</string>
+    <string name="game_instructions">Tap to reveal\nLong press to flag</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="gray">#4D4D4D</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#0000</color>
+
+    <color name="background_g1">#e06c3f</color>
+    <color name="background_g2">#e0893f</color>
+    <color name="background_header">#e58d00</color>
+    <color name="background_pop_up">#e0b63f</color>
+    <color name="tahiti_gold">#e0ca3f</color>
+    <color name="gold">#e0a23f</color>
+
+    <color name="game_board">#1a0a04</color>
+    <color name="tile_revealed">#3d2a23</color>
+    <color name="tile_unreveal">#a16f5d</color>
+
+    <color name="tile_num_1">#5b9bd5</color>
+    <color name="tile_num_2">#70ad47</color>
+    <color name="tile_num_3">#ff5050</color>
+    <color name="tile_num_4">#4472c4</color>
+    <color name="tile_num_5">#c55a11</color>
+    <color name="tile_num_6">#33cccc</color>
+    <color name="tile_num_7">#262626</color>
+    <color name="tile_num_8">#7f7f7f</color>
+</resources>
