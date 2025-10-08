@@ -32,6 +32,8 @@ public class Tile {
     public Tile adjacent_BC;
     public Tile adjacent_BR;
 
+    public int visit_count = 0; // for solvability check
+
     private static final int[] number_colors = {
             R.color.tile_num_1,
             R.color.tile_num_2,
@@ -43,7 +45,7 @@ public class Tile {
             R.color.tile_num_8
     };
 
-    Tile (Board board, int posX, int posY){
+    Tile(Board board, int posX, int posY){
         isMine = false;
         isRevealed = false;
         isFlagged = false;
@@ -51,6 +53,29 @@ public class Tile {
         this.board = board;
         this.posX = posX;
         this.posY = posY;
+    }
+
+    // Copy constructor for solvability check
+    Tile(Tile tile) {
+        posX = tile.posX;
+        posY = tile.posY;
+        value = tile.value;
+
+        isMine = tile.isMine;
+        isRevealed = tile.isRevealed;
+        isFlagged = tile.isFlagged;
+
+        visit_count = tile.visit_count;
+    }
+
+    public void copyValue(Tile tile) {
+        if (isFlagged != tile.isFlagged || isRevealed != tile.isRevealed){
+            isFlagged = tile.isFlagged;
+            isRevealed = tile.isRevealed;
+//            UpdateVisual();//////////////////////////////devvv
+        }
+        visit_count = tile.visit_count;
+        UpdateVisual();
     }
 
     public Button CreateButton(Context context, int width, int height, int margin){
@@ -94,11 +119,13 @@ public class Tile {
             if (isMine) {
                 button.setText("💥");
             } else if (value > 0) {
-                button.setText(String.valueOf(value));
+//                button.setText(String.valueOf(value));
+                button.setText(String.valueOf(visit_count));    ///////////////// devvvvvvvvvvvvvv
                 button.setTextColor(number_colors[value - 1]);
                 color = ContextCompat.getColor(btn_context, number_colors[value - 1]);
             } else {
-                button.setText("");
+                button.setText(String.valueOf(visit_count));    ///////////////// devvvvvvvvvvvvvv
+//                button.setText("");
             }
         } else {
             button.setBackgroundResource(R.drawable.tile_unreveal);
@@ -116,19 +143,46 @@ public class Tile {
         this.value += value;
     }
 
+    // checkBoard == true; for normal gameplay
+    // checkBoard == false; for solvability check
     public void flag() {
-        if (isRevealed || board.isLost || board.isWin) return;
+        if (board != null)
+            if (isRevealed || board.isLost || board.isWin) return;
+        else
+            if (isRevealed) return;
         isFlagged = !isFlagged;
-        UpdateVisual();
+        if (board != null)
+            UpdateVisual();
     }
 
     public void reveal() {
         // return unrelated
-        if (isRevealed || isFlagged || board.isLost || board.isWin) return;
+        if (board != null){
+            if (isRevealed || isFlagged || board.isLost || board.isWin) return;
+        } else {
+            if (isRevealed || isFlagged) return;
+        }
+        // set last click
+        if (board != null) {
+            board.last_click_x = posX;
+            board.last_click_y = posY;
+        }
         // first click safe
-        if (board.first_click) {
-            board.first_click = false;
+        if (board != null && !board.is_first_click_done) {
             board.FirstClickSafe(posX, posY);
+//            boolean canSolve = false;
+//            int totalMines = board.mine_count;
+//            while (!canSolve) {
+//                board.FirstClickSafe(posX, posY);
+//                canSolve = board.SolvabilityCheck(posX, posY, board.mine_count);
+//                if (!canSolve) {
+//                    // regenerate board
+//                    board.GenerateCleanBoard();
+//                    board.GenerateBoardView();
+//                    board.PlaceMinesRandomly(totalMines);
+//                }
+//            }
+            board.is_first_click_done = true;
         }
         // reveal the tile(s)
         isRevealed = true;
@@ -144,10 +198,13 @@ public class Tile {
             if(adjacent_BC != null) adjacent_BC.reveal();
             if(adjacent_BR != null) adjacent_BR.reveal();
         }
-        if (isMine) board.isLost = true;
-        board.revealed_count++;
-        if (board.revealed_count == board.width * board.height - board.mine_count) board.isWin = true;
-        UpdateVisual();
+        if (board != null) {
+            if (isMine) board.isLost = true;
+            board.revealed_count++;
+            if (board.revealed_count == board.width * board.height - board.mine_count)
+                board.isWin = true;
+            UpdateVisual();
+        }
     }
 
     public void setMine(boolean mine){

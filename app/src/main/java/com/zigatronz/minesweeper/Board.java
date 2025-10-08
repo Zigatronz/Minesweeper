@@ -3,6 +3,9 @@ package com.zigatronz.minesweeper;
 import android.view.View;
 import android.widget.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
     private LinearLayout boardUI;
@@ -16,11 +19,14 @@ public class Board {
     public int mine_count;
     public int revealed_count;
 
-    public boolean first_click;
+    public boolean is_first_click_done;
     public boolean isLost;
     public boolean isWin;
 
-    Board (LinearLayout boardUI, int width, int height) {
+    public int last_click_x;
+    public int last_click_y;
+
+    Board(LinearLayout boardUI, int width, int height) {
         this.boardUI = boardUI;
         this.width = width;
         this.height = height;
@@ -29,7 +35,7 @@ public class Board {
         isWin = false;
         mine_count = 0;
         revealed_count = 0;
-        first_click = true;
+        is_first_click_done = false;
     }
 
     public void GenerateCleanBoard() {
@@ -42,7 +48,7 @@ public class Board {
         isWin = false;
         mine_count = 0;
         revealed_count = 0;
-        first_click = true;
+        is_first_click_done = false;
 
         // initialize all tiles
         for (int y = 0; y < h; y++) {
@@ -55,16 +61,16 @@ public class Board {
         // set tile adjacent pointers
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                if (y - 1 >= 0 && x - 1 >= 0) board[y][x].adjacent_TL = board[y - 1][x - 1];
-                if (y - 1 >= 0              ) board[y][x].adjacent_TC = board[y - 1][x    ];
-                if (y - 1 >= 0 && x + 1 <  w) board[y][x].adjacent_TR = board[y - 1][x + 1];
+                if (y - 1 >= 0 && x - 1 >= 0)   board[x][y].adjacent_TL = board[x - 1][y - 1];
+                if (y - 1 >= 0)                 board[x][y].adjacent_TC = board[x    ][y - 1];
+                if (y - 1 >= 0 && x + 1 < w)    board[x][y].adjacent_TR = board[x + 1][y - 1];
 
-                if (x - 1 >= 0              ) board[y][x].adjacent_ML = board[y    ][x - 1];
-                if (x + 1 <  w              ) board[y][x].adjacent_MR = board[y    ][x + 1];
+                if (x - 1 >= 0)                 board[x][y].adjacent_ML = board[x - 1][y    ];
+                if (x + 1 < w)                  board[x][y].adjacent_MR = board[x + 1][y    ];
 
-                if (y + 1 <  h && x - 1 >= 0) board[y][x].adjacent_BL = board[y + 1][x - 1];
-                if (y + 1 <  h              ) board[y][x].adjacent_BC = board[y + 1][x    ];
-                if (y + 1 <  h && x + 1 <  w) board[y][x].adjacent_BR = board[y + 1][x + 1];
+                if (y + 1 < h && x - 1 >= 0)    board[x][y].adjacent_BL = board[x - 1][y + 1];
+                if (y + 1 < h)                  board[x][y].adjacent_BC = board[x    ][y + 1];
+                if (y + 1 < h && x + 1 < w)     board[x][y].adjacent_BR = board[x + 1][y + 1];
             }
         }
     }
@@ -84,8 +90,8 @@ public class Board {
 
         // cell size
         int tile_margin = 2;
-        int total_cell_width = boardUI_width - ( ( ( board_padding * 2) + ( tile_margin * width * 2 ) ) );
-        int total_cell_height = boardUI_height - ( ( ( board_padding * 2) + ( tile_margin * height * 2 ) ) );
+        int total_cell_width = boardUI_width - (((board_padding * 2) + (tile_margin * width * 2)));
+        int total_cell_height = boardUI_height - (((board_padding * 2) + (tile_margin * height * 2)));
         int cell_width = total_cell_width / width;
         int cell_height = total_cell_height / height;
 
@@ -106,7 +112,7 @@ public class Board {
             for (int x = 0; x < width; x++) {
                 int screen_width = boardUI.getWidth();
                 row_layout.addView(
-                        board[x][y].CreateButton( row_layout.getContext(), cell_width, cell_height, tile_margin)
+                        board[x][y].CreateButton(row_layout.getContext(), cell_width, cell_height, tile_margin)
                 );
             }
         }
@@ -136,6 +142,12 @@ public class Board {
         }
     }
 
+    //  /////////////////////////////
+    //  /// Make first click safe ///
+    //  ///         and           ///
+    //  /// Check for solvability ///
+    //  /////////////////////////////
+
     public void FirstClickSafe(int x, int y) {
         Tile[] tiles_to_avoid = {
                 board[x][y].adjacent_TL,
@@ -158,5 +170,77 @@ public class Board {
                 PlaceMinesRandomly(1, tiles_to_avoid);
             }
         }
+    }
+
+    public boolean SolvabilityCheck(int startX, int startY, int total_mines) {
+        SolvabilityChecker.Solver_Board newBoard = get_solver_board(startX, startY);
+        newBoard = SolvabilityChecker.SolveBoard(newBoard);
+
+        // return is possible or not
+        return (newBoard.get_unrevealed_count() == total_mines);
+    }
+
+
+//    public SolvabilityChecker.Solver_Board get_solver_board(int startX, int startY) {
+//        if (height == 0 || width == 0) return null;
+//
+//        SolvabilityChecker.Solver_Board newBoard = new SolvabilityChecker.Solver_Board();
+//        newBoard.board = new Tile[height][width];
+//
+//        // copy tile one by one
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                newBoard.board[x][y] = new Tile(board[x][y]);
+//            }
+//        }
+//
+//        newBoard.pointer = new SolvabilityChecker.Solver_Board.Pointer(startX, startY);
+//
+//        return newBoard;
+//    }
+    public SolvabilityChecker.Solver_Board get_solver_board(int startX, int startY) {
+        if (height == 0 || width == 0) return null;
+
+        SolvabilityChecker.Solver_Board solver_board = new SolvabilityChecker.Solver_Board();
+        // Correctly create the new board as [width][height]
+        solver_board.board = new Tile[width][height];
+
+        // copy tile one by one (this loop is now correct)
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                solver_board.board[x][y] = new Tile(board[x][y]);
+            }
+        }
+
+        // resolve adjacent
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (y - 1 >= 0 && x - 1 >= 0)           solver_board.board[x][y].adjacent_TL = solver_board.board[x - 1][y - 1];
+                if (y - 1 >= 0)                         solver_board.board[x][y].adjacent_TC = solver_board.board[x    ][y - 1];
+                if (y - 1 >= 0 && x + 1 < width)        solver_board.board[x][y].adjacent_TR = solver_board.board[x + 1][y - 1];
+
+                if (x - 1 >= 0)                         solver_board.board[x][y].adjacent_ML = solver_board.board[x - 1][y    ];
+                if (x + 1 < width)                      solver_board.board[x][y].adjacent_MR = solver_board.board[x + 1][y    ];
+
+                if (y + 1 < height && x - 1 >= 0)       solver_board.board[x][y].adjacent_BL = solver_board.board[x - 1][y + 1];
+                if (y + 1 < height)                     solver_board.board[x][y].adjacent_BC = solver_board.board[x    ][y + 1];
+                if (y + 1 < height && x + 1 < width)    solver_board.board[x][y].adjacent_BR = solver_board.board[x + 1][y + 1];
+            }
+        }
+
+        solver_board.pointer = new SolvabilityChecker.Solver_Board.Pointer(startX, startY);
+
+        return solver_board;
+    }
+
+    public void update_from_solver_board(SolvabilityChecker.Solver_Board solver_board) {
+        // copy tile one by one
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                board[x][y].copyValue(solver_board.board[x][y]);
+            }
+        }
+        last_click_x = solver_board.pointer.x;
+        last_click_y = solver_board.pointer.y;
     }
 }
