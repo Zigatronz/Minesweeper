@@ -28,4 +28,9 @@
     <string name="game_text_mine">x99</string>
     <string name="game_text_time">999s</string>
     <string name="game_instructions">Tap to reveal\nLong press to flag</string>
+
+    <string name="game_overlay_win_title">Congratulations 😎</string>
+    <string name="game_overlay_win_subtitle">You secured all the mines on (DIFFICULTY) difficulty</string>
+    <string name="game_overlay_lose_title">You Lose 💀</string>
+    <string name="game_overlay_lose_subtitle">You have blown up one of the mines on (DIFFICULTY) difficulty</string>
 </resources>

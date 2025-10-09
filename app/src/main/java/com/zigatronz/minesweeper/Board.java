@@ -25,6 +25,14 @@ public class Board {
     public int last_click_x;
     public int last_click_y;
 
+    private final LinearLayout overlay;
+    private final TextView overlay_title;
+    private final TextView overlay_subtitle;
+    private final String text_win_title;
+    private final String text_win_subtitle;
+    private final String text_lose_title;
+    private final String text_lose_subtitle;
+
     private final TextView mine_text;
     private final TextView time_text;
     private int time = 0;
@@ -67,24 +75,63 @@ public class Board {
 
 
     public void setWin(){
-        isWin = true;
         Stopwatch_Stop();
+
+        overlay_title.setText(text_win_title);
+        overlay_subtitle.setText(text_win_subtitle);
+        overlay.setVisibility(View.VISIBLE);
+
+        // flag all mine remaining mine
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Tile tile = board[x][y];
+                if (tile.isMine && !tile.isRevealed && !tile.isFlagged) {
+                    tile.flag();
+                }
+            }
+        }
+
+        isWin = true;
     }
 
     public void setLost(){
-        isLost = true;
         Stopwatch_Stop();
+
+        overlay_title.setText(text_lose_title);
+        overlay_subtitle.setText(text_lose_subtitle);
+        overlay.setVisibility(View.VISIBLE);
+
+        // update mine tiles visual, so that 💣 is rendered
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Tile tile = board[x][y];
+                if (tile.isMine) {
+                    tile.UpdateVisual();
+                }
+            }
+        }
+
+        isLost = true;
     }
 
 
 
-    Board(LinearLayout boardUI, TextView mine_text, TextView time_text, int width, int height) {
+    Board(LinearLayout boardUI, TextView mine_text, TextView time_text, LinearLayout overlay, TextView overlay_title, TextView overlay_subtitle,
+          String text_win_title, String text_win_subtitle, String text_lose_title, String text_lose_subtitle, int width, int height) {
         this.boardUI = boardUI;
         this.width = width;
         this.height = height;
 
         this.mine_text = mine_text;
         this.time_text = time_text;
+
+        this.overlay = overlay;
+        this.overlay_title = overlay_title;
+        this.overlay_subtitle = overlay_subtitle;
+        this.text_win_title = text_win_title;
+        this.text_win_subtitle = text_win_subtitle;
+        this.text_lose_title = text_lose_title;
+        this.text_lose_subtitle = text_lose_subtitle;
 
         isLost = false;
         isWin = false;
@@ -102,6 +149,7 @@ public class Board {
         final int tile_margin = 2;
         board = new Tile[w][h];
 
+        overlay.setVisibility(View.GONE);
         isLost = false;
         isWin = false;
         mine_count = 0;

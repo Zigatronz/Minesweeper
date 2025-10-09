@@ -44,10 +44,25 @@ public class GameActivity extends AppCompatActivity {
         View gameMine = findViewById(R.id.game_text_mine);
         View gameTime = findViewById(R.id.game_text_time);
 
+        View gameOverlay = findViewById(R.id.game_end_overlay);
+        View gameOverlay_title = findViewById(R.id.game_end_overlay_title);
+        View gameOverlay_subtitle = findViewById(R.id.game_end_overlay_subtitle);
+
+        String text_win_title = getResources().getString(R.string.game_overlay_win_title);
+        String text_win_subtitle = getResources().getString(R.string.game_overlay_win_subtitle);
+        String text_lose_title = getResources().getString(R.string.game_overlay_lose_title);
+        String text_lose_subtitle = getResources().getString(R.string.game_overlay_lose_subtitle);
+
         if (difficulty.equals("easy")){
-            board = new Board((LinearLayout) gameView, (TextView) gameMine, (TextView) gameTime, 9, 9);
+            board = new Board((LinearLayout) gameView, (TextView) gameMine, (TextView) gameTime, (LinearLayout) gameOverlay, (TextView) gameOverlay_title, (TextView) gameOverlay_subtitle,
+                    text_win_title, text_win_subtitle.replaceAll("\\(DIFFICULTY\\)", "Easy"),
+                    text_lose_title, text_lose_subtitle.replaceAll("\\(DIFFICULTY\\)", "Easy"),
+                    9, 9);
         } else {
-            board = new Board((LinearLayout) gameView, (TextView) gameMine, (TextView) gameTime, 16, 16);
+            board = new Board((LinearLayout) gameView, (TextView) gameMine, (TextView) gameTime, (LinearLayout) gameOverlay, (TextView) gameOverlay_title, (TextView) gameOverlay_subtitle,
+                    text_win_title, text_win_subtitle.replaceAll("\\(DIFFICULTY\\)", "Intermediate"),
+                    text_lose_title, text_lose_subtitle.replaceAll("\\(DIFFICULTY\\)", "Intermediate"),
+                    16, 16);
         }
 
         // create board after display is settled

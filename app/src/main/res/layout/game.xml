@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background"
@@ -80,8 +82,8 @@
                     android:drawableLeft="@drawable/game_mine"
                     android:gravity="center"
                     android:text="@string/game_text_mine"
-                    android:textSize="16sp"
                     android:textColor="@color/black"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -92,8 +94,8 @@
                     android:drawableLeft="@drawable/game_time"
                     android:gravity="center"
                     android:text="@string/game_text_time"
-                    android:textSize="16sp"
                     android:textColor="@color/black"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -103,7 +105,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/game_board"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
 
             <Button
                 android:id="@+id/solve"
@@ -121,10 +123,41 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginBottom="30dp"
-                android:textColor="@color/gray"
-                android:text="@string/game_instructions" />
+                android:text="@string/game_instructions"
+                android:textColor="@color/gray" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/game_end_overlay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:background="#00FFFFFF"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/game_end_overlay_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game_overlay_win_title"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/game_end_overlay_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game_overlay_win_subtitle"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

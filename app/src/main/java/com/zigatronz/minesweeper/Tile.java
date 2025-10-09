@@ -110,7 +110,7 @@ public class Tile {
         return true;    // tell the lister that the action was handled by the method
     }
 
-    private void UpdateVisual(){
+    public void UpdateVisual(){
         int color = ContextCompat.getColor(btn_context, R.color.white);
         if (isRevealed)
         {
@@ -129,6 +129,7 @@ public class Tile {
         } else {
             button.setBackgroundResource(R.drawable.tile_unreveal);
             if (isFlagged)  button.setText("🚩");
+            else if (board.isLost && isMine) button.setText("💣");
             else            button.setText("");
         }
         button.setTextColor(color);
@@ -153,6 +154,7 @@ public class Tile {
         if (board != null){
             board.flag_count += isFlagged ? 1 : -1;
             UpdateVisual();
+            board.UpdateMineText();
         }
     }
 
@@ -163,11 +165,13 @@ public class Tile {
         } else {
             if (isRevealed || isFlagged) return;
         }
+
         // set last click
         if (board != null) {
             board.last_click_x = posX;
             board.last_click_y = posY;
         }
+
         // first click safe
         if (board != null && !board.is_first_click_done) {
 //            board.FirstClickSafe(posX, posY);
@@ -185,7 +189,11 @@ public class Tile {
             }
             board.Stopwatch_Start();
             board.is_first_click_done = true;
+
+            board.board[posX][posY].reveal();
+            return;
         }
+
         // reveal the tile(s)
         isRevealed = true;
         if (value == 0) {
@@ -201,13 +209,14 @@ public class Tile {
             if(adjacent_BR != null) adjacent_BR.reveal();
         }
         if (board != null) {
-            if (isMine) board.setLost();
+            if (isMine)
+                board.setLost();
             board.revealed_count++;
             if (board.revealed_count == board.width * board.height - board.mine_count)
                 board.setWin();
             UpdateVisual();
         }
-    }
+                           }
 
     public void setMine(boolean mine){
         if (isMine && !mine) {
