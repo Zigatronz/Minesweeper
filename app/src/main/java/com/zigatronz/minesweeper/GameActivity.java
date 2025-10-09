@@ -41,10 +41,13 @@ public class GameActivity extends AppCompatActivity {
         btn_reset.setOnClickListener(this::onClickReset);
 
         View gameView = findViewById(R.id.GameBoard);
+        View gameMine = findViewById(R.id.game_text_mine);
+        View gameTime = findViewById(R.id.game_text_time);
+
         if (difficulty.equals("easy")){
-            board = new Board((LinearLayout) gameView, 9, 9);
+            board = new Board((LinearLayout) gameView, (TextView) gameMine, (TextView) gameTime, 9, 9);
         } else {
-            board = new Board((LinearLayout) gameView, 16, 16);
+            board = new Board((LinearLayout) gameView, (TextView) gameMine, (TextView) gameTime, 16, 16);
         }
 
         // create board after display is settled
@@ -60,35 +63,35 @@ public class GameActivity extends AppCompatActivity {
         gameView.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
 
         // DEV | REMOVE THIS LATER
-        Button solve = findViewById(R.id.solve);
-        solve.setOnClickListener(this::solve);
+//        Button solve = findViewById(R.id.solve);
+//        solve.setOnClickListener(this::solve);
     }
 
     // DEV | REMOVE THIS LATER
-    private void solve(View view) {
-        try {
-            if (!board.is_first_click_done) {
-
-            } else {
-                SolvabilityChecker.Solver_Board solver_board = board.get_solver_board(board.last_click_x, board.last_click_y);
-                solver_board = SolvabilityChecker.SolveOneStep(solver_board);
-                // find change
-                for (int y = 0; y < board.height; y++) {
-                    for (int x = 0; x < board.width; x++) {
-                        if (board.board[x][y].isFlagged != solver_board.board[x][y].isFlagged) {
-                            solver_board = solver_board;
-                        }
-                        if (board.board[x][y].isRevealed != solver_board.board[x][y].isRevealed) {
-                            solver_board = solver_board;
-                        }
-                    }
-                }
-                board.update_from_solver_board(solver_board);
-            }
-        } catch (Exception e) {
-            throw  new RuntimeException(e);
-        }
-    }
+//    private void solve(View view) {
+//        try {
+//            if (!board.is_first_click_done) {
+//
+//            } else {
+//                SolvabilityChecker.Solver_Board solver_board = board.get_solver_board(board.last_click_x, board.last_click_y);
+//                solver_board = SolvabilityChecker.SolveOneStep(solver_board);
+//                // find change
+//                for (int y = 0; y < board.height; y++) {
+//                    for (int x = 0; x < board.width; x++) {
+//                        if (board.board[x][y].isFlagged != solver_board.board[x][y].isFlagged) {
+//                            solver_board = solver_board;
+//                        }
+//                        if (board.board[x][y].isRevealed != solver_board.board[x][y].isRevealed) {
+//                            solver_board = solver_board;
+//                        }
+//                    }
+//                }
+//                board.update_from_solver_board(solver_board);
+//            }
+//        } catch (Exception e) {
+//            throw  new RuntimeException(e);
+//        }
+//    }
 
     private void CreateBoard(){
         board.GenerateCleanBoard();

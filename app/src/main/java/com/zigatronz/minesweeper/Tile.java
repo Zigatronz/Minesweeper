@@ -68,15 +68,14 @@ public class Tile {
         visit_count = tile.visit_count;
     }
 
-    public void copyValue(Tile tile) {
-        if (isFlagged != tile.isFlagged || isRevealed != tile.isRevealed){
-            isFlagged = tile.isFlagged;
-            isRevealed = tile.isRevealed;
-//            UpdateVisual();//////////////////////////////devvv
-        }
-        visit_count = tile.visit_count;
-        UpdateVisual();
-    }
+//    public void copyValue(Tile tile) {
+//        if (isFlagged != tile.isFlagged || isRevealed != tile.isRevealed){
+//            isFlagged = tile.isFlagged;
+//            isRevealed = tile.isRevealed;
+//        }
+//        visit_count = tile.visit_count;
+//        UpdateVisual();
+//    }
 
     public Button CreateButton(Context context, int width, int height, int margin){
         btn_context = context;
@@ -119,13 +118,13 @@ public class Tile {
             if (isMine) {
                 button.setText("💥");
             } else if (value > 0) {
-//                button.setText(String.valueOf(value));
-                button.setText(String.valueOf(visit_count));    ///////////////// devvvvvvvvvvvvvv
+                button.setText(String.valueOf(value));
+//                button.setText(String.valueOf(visit_count));    ///////////////// devvvvvvvvvvvvvv
                 button.setTextColor(number_colors[value - 1]);
                 color = ContextCompat.getColor(btn_context, number_colors[value - 1]);
             } else {
-                button.setText(String.valueOf(visit_count));    ///////////////// devvvvvvvvvvvvvv
-//                button.setText("");
+//                button.setText(String.valueOf(visit_count));    ///////////////// devvvvvvvvvvvvvv
+                button.setText("");
             }
         } else {
             button.setBackgroundResource(R.drawable.tile_unreveal);
@@ -151,8 +150,10 @@ public class Tile {
         else
             if (isRevealed) return;
         isFlagged = !isFlagged;
-        if (board != null)
+        if (board != null){
+            board.flag_count += isFlagged ? 1 : -1;
             UpdateVisual();
+        }
     }
 
     public void reveal() {
@@ -169,19 +170,20 @@ public class Tile {
         }
         // first click safe
         if (board != null && !board.is_first_click_done) {
-            board.FirstClickSafe(posX, posY);
-//            boolean canSolve = false;
-//            int totalMines = board.mine_count;
-//            while (!canSolve) {
-//                board.FirstClickSafe(posX, posY);
-//                canSolve = board.SolvabilityCheck(posX, posY, board.mine_count);
-//                if (!canSolve) {
-//                    // regenerate board
-//                    board.GenerateCleanBoard();
-//                    board.GenerateBoardView();
-//                    board.PlaceMinesRandomly(totalMines);
-//                }
-//            }
+//            board.FirstClickSafe(posX, posY);
+            boolean canSolve = false;
+            int totalMines = board.mine_count;
+            while (!canSolve) {
+                board.FirstClickSafe(posX, posY);
+                canSolve = board.SolvabilityCheck(posX, posY, totalMines);
+                if (!canSolve) {
+                    // regenerate board
+                    board.GenerateCleanBoard();
+                    board.GenerateBoardView();
+                    board.PlaceMinesRandomly(totalMines);
+                }
+            }
+            board.Stopwatch_Start();
             board.is_first_click_done = true;
         }
         // reveal the tile(s)
@@ -199,10 +201,10 @@ public class Tile {
             if(adjacent_BR != null) adjacent_BR.reveal();
         }
         if (board != null) {
-            if (isMine) board.isLost = true;
+            if (isMine) board.setLost();
             board.revealed_count++;
             if (board.revealed_count == board.width * board.height - board.mine_count)
-                board.isWin = true;
+                board.setWin();
             UpdateVisual();
         }
     }

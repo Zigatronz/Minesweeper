@@ -111,7 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50sp"
                 android:layout_marginRight="50sp"
-                android:text="Solve 1 Step" />
+                android:text="Solve 1 Step"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"

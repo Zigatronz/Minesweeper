@@ -3,19 +3,18 @@ package com.zigatronz.minesweeper;
 import android.view.View;
 import android.widget.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Handler;
 
 public class Board {
 
-    private LinearLayout boardUI;
+    private final LinearLayout boardUI;
     private int boardUI_width;
     private int boardUI_height;
-
 
     public int width;
     public int height;
     public Tile[][] board;
+    public int flag_count;
     public int mine_count;
     public int revealed_count;
 
@@ -26,16 +25,75 @@ public class Board {
     public int last_click_x;
     public int last_click_y;
 
-    Board(LinearLayout boardUI, int width, int height) {
+    private final TextView mine_text;
+    private final TextView time_text;
+    private int time = 0;
+    private int maxTime = 999;
+    private final Handler timerHandler = new Handler();
+    private Runnable timerRunnable;
+
+    public void UpdateMineText() {
+        mine_text.setText("x".concat(String.valueOf(mine_count - flag_count)));
+    }
+
+    public void UpdateTimeText() {
+        time_text.setText(String.valueOf(time).concat("s"));
+    }
+
+    public void Stopwatch_Start() {
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (time < maxTime)
+                    time++;
+                UpdateTimeText();
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
+        timerHandler.postDelayed(timerRunnable, 0);
+    }
+
+    public void Stopwatch_Stop() {
+        if (timerRunnable != null) {
+            timerHandler.removeCallbacks(timerRunnable);
+        }
+    }
+
+    public void Stopwatch_Reset() {
+        Stopwatch_Stop();
+        time = 0;
+        UpdateTimeText();
+    }
+
+
+    public void setWin(){
+        isWin = true;
+        Stopwatch_Stop();
+    }
+
+    public void setLost(){
+        isLost = true;
+        Stopwatch_Stop();
+    }
+
+
+
+    Board(LinearLayout boardUI, TextView mine_text, TextView time_text, int width, int height) {
         this.boardUI = boardUI;
         this.width = width;
         this.height = height;
 
+        this.mine_text = mine_text;
+        this.time_text = time_text;
+
         isLost = false;
         isWin = false;
         mine_count = 0;
+        flag_count = 0;
         revealed_count = 0;
         is_first_click_done = false;
+
+        UpdateTimeText();
     }
 
     public void GenerateCleanBoard() {
@@ -47,6 +105,7 @@ public class Board {
         isLost = false;
         isWin = false;
         mine_count = 0;
+        flag_count = 0;
         revealed_count = 0;
         is_first_click_done = false;
 
@@ -73,6 +132,8 @@ public class Board {
                 if (y + 1 < h && x + 1 < w)     board[x][y].adjacent_BR = board[x + 1][y + 1];
             }
         }
+
+        Stopwatch_Reset();
     }
 
     public void GenerateBoardView() {
@@ -140,6 +201,7 @@ public class Board {
             board[x][y].setMine(true);
             mine_placed++;
         }
+        UpdateMineText();
     }
 
     //  /////////////////////////////
@@ -174,7 +236,7 @@ public class Board {
 
     public boolean SolvabilityCheck(int startX, int startY, int total_mines) {
         SolvabilityChecker.Solver_Board newBoard = get_solver_board(startX, startY);
-        newBoard = SolvabilityChecker.SolveBoard(newBoard);
+        newBoard = SolvabilityChecker.SolveBoard(newBoard, total_mines);
 
         // return is possible or not
         return (newBoard.get_unrevealed_count() == total_mines);
@@ -233,14 +295,14 @@ public class Board {
         return solver_board;
     }
 
-    public void update_from_solver_board(SolvabilityChecker.Solver_Board solver_board) {
-        // copy tile one by one
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                board[x][y].copyValue(solver_board.board[x][y]);
-            }
-        }
-        last_click_x = solver_board.pointer.x;
-        last_click_y = solver_board.pointer.y;
-    }
+//    public void update_from_solver_board(SolvabilityChecker.Solver_Board solver_board) {
+//        // copy tile one by one
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                board[x][y].copyValue(solver_board.board[x][y]);
+//            }
+//        }
+//        last_click_x = solver_board.pointer.x;
+//        last_click_y = solver_board.pointer.y;
+//    }
 }
