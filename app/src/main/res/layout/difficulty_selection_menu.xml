@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_background"
         android:orientation="vertical">
 
         <FrameLayout
@@ -45,72 +45,80 @@
             </LinearLayout>
         </FrameLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            android:orientation="vertical"
-            android:paddingLeft="80dp"
-            android:paddingTop="75dp"
-            android:paddingRight="80dp"
-            android:paddingBottom="175dp"
-            android:scrollbars="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:padding="20dp"
-                android:text="@string/diff_header"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:isScrollContainer="true"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="50dp"
+                android:scrollbars="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/diff_header"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
 
                 <android.widget.Button
                     android:id="@+id/diff_btn_easy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_margin="3dp"
                     android:background="@drawable/button_box"
-                    android:textColor="@color/black"
-                    android:text="@string/diff_easy_btn" />
+                    android:text="@string/diff_easy_btn"
+                    android:textColor="@color/black" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/diff_easy_description"
-                    android:textColor="@color/gray"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/gray" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
 
                 <android.widget.Button
                     android:id="@+id/diff_btn_intermediate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_margin="3dp"
                     android:background="@drawable/button_box"
-                    android:textColor="@color/black"
-                    android:text="@string/diff_intermediate_btn" />
+                    android:text="@string/diff_intermediate_btn"
+                    android:textColor="@color/black" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/diff_intermediate_description"
-                    android:textColor="@color/gray"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                    android:textAlignment="center"
+                    android:textColor="@color/gray" />
 
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

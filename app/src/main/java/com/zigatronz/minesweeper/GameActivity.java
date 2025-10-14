@@ -109,12 +109,17 @@ public class GameActivity extends AppCompatActivity {
 //    }
 
     private void CreateBoard(){
-        board.GenerateCleanBoard();
-        board.GenerateBoardView();
-        if (difficulty.equals("easy"))
-            board.PlaceMinesRandomly(10);
-        else
-            board.PlaceMinesRandomly(32);
+        try {
+            board.GenerateCleanBoard();
+            board.GenerateBoardView();
+            if (difficulty.equals("easy"))
+                board.PlaceMinesRandomly(10);
+            else
+                board.PlaceMinesRandomly(32);
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to create board, please try again.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void onClickExit(View view) {

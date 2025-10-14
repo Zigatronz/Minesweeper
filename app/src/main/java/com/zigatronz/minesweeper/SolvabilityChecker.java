@@ -36,6 +36,7 @@ public class SolvabilityChecker {
     public static void SolveOneStep(Solver_Board solver_board) {
         int action_count_previous = solver_board.actionDone;
         int maximum_traverse = solver_board.board.length * solver_board.board[0].length;
+        maximum_traverse -= (int) (maximum_traverse * 0.2f);    // reduce traverse by 20% for performance
         while (action_count_previous == solver_board.actionDone && maximum_traverse > 0){
             maximum_traverse --;
 

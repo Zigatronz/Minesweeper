@@ -102,7 +102,11 @@ public class Tile {
     }
 
     private void OnClickTile(View view){
-        reveal();
+        try {
+            reveal();
+        } catch (Exception e) {
+            Toast.makeText(btn_context, "Oops! Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean OnHoldTile(View view){
@@ -176,17 +180,24 @@ public class Tile {
         if (board != null && !board.is_first_click_done) {
 //            board.FirstClickSafe(posX, posY);
             boolean canSolve = false;
+            int maxRegenerate = 5;      // adjust this to cut off the process to save resource
+            int regenerateCount = 0;
             int totalMines = board.mine_count;
-            while (!canSolve) {
+            do {
                 board.FirstClickSafe(posX, posY);
                 canSolve = board.SolvabilityCheck(posX, posY, totalMines);
-                if (!canSolve) {
-                    // regenerate board
-                    board.GenerateCleanBoard();
-                    board.GenerateBoardView();
-                    board.PlaceMinesRandomly(totalMines);
+                if (canSolve) break;
+                // regenerate board
+                regenerateCount++;
+                board.GenerateCleanBoard();
+                board.GenerateBoardView();
+                board.PlaceMinesRandomly(totalMines);
+                if (regenerateCount >= maxRegenerate) {
+                    Toast.makeText(btn_context, "Failed to generate a solvable board. Please reveal again.", Toast.LENGTH_LONG).show();
+                    return;
                 }
-            }
+            } while (!canSolve);
+
             board.Stopwatch_Start();
             board.is_first_click_done = true;
 
@@ -216,7 +227,7 @@ public class Tile {
                 board.setWin();
             UpdateVisual();
         }
-                           }
+   }
 
     public void setMine(boolean mine){
         if (isMine && !mine) {

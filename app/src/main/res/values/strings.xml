@@ -8,9 +8,9 @@
 
     <string name="htp_img_description">How to play image.</string>
     <string name="htp_header">How to play</string>
-    <string name="htp_btn_return">Back to Main Menu</string>
-    <string name="htp_btn_next">Next page</string>
-    <string name="htp_btn_previous">Previous page</string>
+    <string name="htp_btn_return">Back to\nMain Menu</string>
+    <string name="htp_btn_next">Next\npage</string>
+    <string name="htp_btn_previous">Previous\npage</string>
     <string name="htp_text1">The board is divided into tiles, with mines randomly distributed.\n\nTo win, you need to open all the tiles that do not contain a mine.\n\nThe number on a tile shows the number of adjacent mines.</string>
     <string name="htp_text2">To start the game, you should click anywhere on the board. This is what the board looks like after your first click.\n\nThe next step is to look at the yellow-outlined tile. The number 1 on the tile indicates there is 1 mine adjacent to it.</string>
     <string name="htp_text3">Look at the adjacent tiles to see if there are any that have not been revealed yet.\n\nYou can see that there is only one unrevealed tile.\n\nThis means we can assume that tile contains a mine.</string>

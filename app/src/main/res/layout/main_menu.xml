@@ -3,25 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_background"
-        android:gravity="center"
-        android:orientation="horizontal">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="50dp">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="140dp"
+                android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/app_logo_description"
@@ -29,11 +31,12 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 android:layout_weight="1"
                 android:text="@string/app_name"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
 
@@ -42,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:layout_weight="1"
                 android:background="@drawable/button_box"
                 android:text="@string/menu_btn_start"
                 android:textColor="@color/black"
@@ -53,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:layout_weight="1"
                 android:background="@drawable/button_box"
                 android:text="@string/menu_btn_htp"
                 android:textColor="@color/black"
@@ -64,12 +69,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:layout_weight="1"
                 android:background="@drawable/button_box"
                 android:text="@string/menu_btn_exit"
                 android:textColor="@color/black"
                 tools:layout_editor_absoluteX="45dp"
                 tools:layout_editor_absoluteY="231dp" />
+
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
