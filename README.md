@@ -28,8 +28,7 @@ This project was developed for a mobile application context.
 ### **Installation**
 
 1. **Clone the repository:**
-   <br>
-   ```git clone https://github.com/Zigatronz/Minesweeper```
+   * ```git clone https://github.com/Zigatronz/Minesweeper```
 
 2. **Open in Android Studio:**
    * Launch Android Studio.
