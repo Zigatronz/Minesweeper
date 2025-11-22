@@ -42,7 +42,7 @@ This project was developed for a mobile application context.
 
 ## **🖼️ Screenshots**
 
-![Main Menu](imgs\1.jpg)
-![Win Screen](imgs\2.jpg)
+![Main Menu](imgs/1.jpg)
+![Win Screen](imgs/2.jpg)
 
 *This project was completed for the **Mobile Application Development (DCS3241)** course at the International Islamic College (IIC, a subsidiary of UIA).*
